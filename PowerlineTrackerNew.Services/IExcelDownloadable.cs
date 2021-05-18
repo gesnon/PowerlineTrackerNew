@@ -7,7 +7,7 @@ namespace PowerlineTrackerNew.Services
 {
     public interface IExcelDownloadable    
     {
-        void BuildExcelWorksheet(ExcelWorksheet worksheet);
+        void BuildExcelWorksheet(ExcelWorksheet worksheet) ;
 
     }
 }
