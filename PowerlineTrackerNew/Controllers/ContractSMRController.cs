@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace PowerlineTrackerNew.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("[controller]/[action]")]
     public class ContractSMRController : ControllerBase
     {
         private static readonly string[] Summaries = new[]
