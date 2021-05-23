@@ -19,7 +19,7 @@ namespace PowerlineTrackerNew.Controllers
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
         };
 
-        private readonly ILogger<TypeOfContractController> _logger;
+        private readonly ILogger<ContractPIRController> _logger;
 
         public ContractPIRController(ILogger<ContractPIRController> logger)
         {
