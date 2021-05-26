@@ -40,10 +40,10 @@ namespace PowerlineTrackerNew.Controllers
         }
 
         [HttpGet]
-        public IActionResult DownloadReport()
+        public IActionResult DownloadReport()    
         {
-            PowerlineReportService service = new PowerlineReportService();
-            ExcelBuilder builder = new ExcelBuilder();
+            PowerlineReportService service = new PowerlineReportService(); // объявляю сервис
+            ExcelBuilder builder = new ExcelBuilder(); //
             byte[] file =  builder.BuildFile(service);
             MemoryStream stream = new MemoryStream(file);
             return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Report.xlsx");
