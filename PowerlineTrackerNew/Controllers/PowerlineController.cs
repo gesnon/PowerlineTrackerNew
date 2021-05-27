@@ -54,7 +54,7 @@ namespace PowerlineTrackerNew.Controllers
         [HttpGet]
         public IActionResult ContractSmrNotNullReport()
         {
-            PowerlineContractPirNotNullReport report = new PowerlineContractPirNotNullReport(); // объявляю сервис
+            PowerlineContractSmrNotNullReport report = new PowerlineContractSmrNotNullReport(); // объявляю сервис
             ExcelBuilder builder = new ExcelBuilder();
             byte[] file = builder.BuildFile(report);
             MemoryStream stream = new MemoryStream(file);
