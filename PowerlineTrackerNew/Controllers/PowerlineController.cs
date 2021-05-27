@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PowerlineTrackerNew.Services;
+using PowerlineTrackerNew.Services.Infrastructure;
 using PowerlineTrackerNew.Services.Reports;
 using System;
 using System.Collections.Generic;
@@ -40,13 +41,25 @@ namespace PowerlineTrackerNew.Controllers
         }
 
         [HttpGet]
-        public IActionResult DownloadReport()    
+        public IActionResult ContractPirNotNullReport()    
         {
-            PowerlineReportService service = new PowerlineReportService(); // объявляю сервис
-            ExcelBuilder builder = new ExcelBuilder(); //
-            byte[] file =  builder.BuildFile(service);
+            PowerlineContractPirNotNullReport report = new PowerlineContractPirNotNullReport(); // объявляю сервис
+            ExcelBuilder builder = new ExcelBuilder(); 
+            byte[] file =  builder.BuildFile(report);
             MemoryStream stream = new MemoryStream(file);
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Report.xlsx");
+
+            return File(stream, Constants.ExcelContentType, report.ReportFileName);
+        }
+
+        [HttpGet]
+        public IActionResult ContractSmrNotNullReport()
+        {
+            PowerlineContractPirNotNullReport report = new PowerlineContractPirNotNullReport(); // объявляю сервис
+            ExcelBuilder builder = new ExcelBuilder();
+            byte[] file = builder.BuildFile(report);
+            MemoryStream stream = new MemoryStream(file);
+
+            return File(stream, Constants.ExcelContentType, report.ReportFileName);
         }
     }
 }

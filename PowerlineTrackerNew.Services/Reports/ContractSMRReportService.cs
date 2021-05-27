@@ -6,7 +6,7 @@ using System.Text;
 
 namespace PowerlineTrackerNew.Services.Reports
 {
-    public class ContractSMRReportService : IExcelDownloadable
+    public class ContractSMRReportService : IExcelReport
     {
         public void BuildExcelWorksheet(ExcelWorksheet worksheet)
         {

@@ -6,7 +6,7 @@ namespace PowerlineTrackerNew.Services
 {
     public class ExcelBuilder
     {
-        public byte[] BuildFile(IExcelDownloadable fillWorksheet)            // сначала создается временный файл, в него записывается необходимый отчет, потом этот файл преобразуется в байты в передаётся для создания постоянного файла, а временный файл удаляется
+        public byte[] BuildFile(IExcelReport fillWorksheet)            // сначала создается временный файл, в него записывается необходимый отчет, потом этот файл преобразуется в байты в передаётся для создания постоянного файла, а временный файл удаляется
         {
             string tempDir = Path.GetTempPath();
             var tempFile = Path.Combine(tempDir, Guid.NewGuid() + ".xlsx");
@@ -21,10 +21,10 @@ namespace PowerlineTrackerNew.Services
 
             byte[] file = new byte[0];
 
-            if (System.IO.File.Exists(tempFile))
+            if (File.Exists(tempFile))
             {
-                file = System.IO.File.ReadAllBytes(tempFile);     
-                System.IO.File.Delete(tempFile);
+                file = File.ReadAllBytes(tempFile);     
+                File.Delete(tempFile);
             }
 
             return file;
