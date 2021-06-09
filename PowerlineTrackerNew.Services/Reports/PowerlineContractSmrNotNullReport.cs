@@ -1,10 +1,10 @@
 ﻿namespace PowerlineTrackerNew.Services.Reports
 {
-    using OfficeOpenXml;
-    using Models;
+    using OfficeOpenXml; 
     using Queries.Powerline;
     using System.Collections.Generic;
     using System;
+    using TrackerDB.Models;
 
     public class PowerlineContractSmrNotNullReport : IExcelReport
     {
@@ -13,11 +13,7 @@
         public void BuildExcelWorksheet(ExcelWorksheet worksheet)
         {
             ContractSmrNotNullQuery query = new ContractSmrNotNullQuery();
-            query.Context = new List<Powerline> {
-                new Powerline { Name="111", ConractSMR=new ContractSMR{Number=111}, ContractPIR=new ContractPIR{Number=111} },
-                new Powerline { Name="222", ContractPIR=new ContractPIR{Number=222} },
-                new Powerline { Name="333", ConractSMR=new ContractSMR{Number=333}, ContractPIR=new ContractPIR{Number=333} } 
-            };
+
             List<Powerline> powerlines = query.Execute();
 
             this.ReportFileName = $"Report {DateTime.Today.ToShortDateString()}.xlsx"; // тут можно изменить название файла

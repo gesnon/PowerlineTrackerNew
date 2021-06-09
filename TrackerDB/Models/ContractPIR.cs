@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace PowerlineTrackerNew.Models
+namespace TrackerDB.Models
 {
     public class ContractPIR
     {

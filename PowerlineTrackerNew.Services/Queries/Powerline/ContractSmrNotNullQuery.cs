@@ -5,9 +5,9 @@ namespace PowerlineTrackerNew.Services.Queries.Powerline
 {
     public class ContractSmrNotNullQuery : BaseQuery
     {
-        public List<Models.Powerline> Execute()
+        public List<TrackerDB.Models.Powerline> Execute()
         {
-            return this.Context.Where(_ => _.ConractSMR != null).ToList();
+            return this.DBContext.Powerlines.Where(_ => _.ConractSMR != null).ToList();
         }
     }
 }

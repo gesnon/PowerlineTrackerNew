@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
+using TrackerDB;
+
 namespace PowerlineTrackerNew.Services.Queries
 {
     public class BaseQuery
     {
-        public List<Models.Powerline> Context { get; set; } // тут потом будет DbContext                  
+        public ContextDB DBContext { get; set; }                 
     }
 }

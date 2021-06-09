@@ -1,10 +1,10 @@
 ﻿namespace PowerlineTrackerNew.Services.Reports
 {
     using OfficeOpenXml;
-    using Models;
     using Queries.Powerline;
     using System.Collections.Generic;
     using System;
+    using TrackerDB.Models;
 
     public class PowerlineContractPirNotNullReport : IExcelReport
     {

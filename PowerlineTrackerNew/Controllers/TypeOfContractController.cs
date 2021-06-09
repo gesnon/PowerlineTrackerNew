@@ -38,15 +38,5 @@ namespace PowerlineTrackerNew.Controllers
             })
             .ToArray();
         }
-
-        [HttpGet]
-        public IActionResult DownloadReport()
-        {
-            TypeOfContractReportService service = new TypeOfContractReportService();
-            ExcelBuilder builder = new ExcelBuilder();
-            byte[] file =  builder.BuildFile(service);
-            MemoryStream stream = new MemoryStream(file);
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Report.xlsx");
-        }
     }
 }
