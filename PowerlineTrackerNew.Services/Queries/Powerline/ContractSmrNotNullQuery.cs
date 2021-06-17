@@ -1,13 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Linq;
+using TrackerDB;
 
 namespace PowerlineTrackerNew.Services.Queries.Powerline
 {
-    public class ContractSmrNotNullQuery : BaseQuery
+    public class ContractSmrNotNullQuery 
     {
-        public List<TrackerDB.Models.Powerline> Execute()
+        public List<TrackerDB.Models.Powerline> Execute(ContextDB DB)
         {
-            return this.DBContext.Powerlines.Where(_ => _.ConractSMR != null).ToList();
+            return DB.Powerlines.Include(_ => _.ConractSMR).Include(_=>_.ContractPIR).Where(_ => _.ConractSMR != null).ToList();
         }
     }
 }

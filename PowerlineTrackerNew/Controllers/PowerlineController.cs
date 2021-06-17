@@ -17,11 +17,6 @@ namespace PowerlineTrackerNew.Controllers
     [Route("[controller]/[action]")]
     public class PowerlineController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
-
         private readonly ILogger<PowerlineController> _logger;
         private readonly ContextDB ContextDB;                             // эта строка добавляется при подключении базы данных
 
@@ -31,27 +26,28 @@ namespace PowerlineTrackerNew.Controllers
             _logger = logger;
         }
 
-        [HttpGet]
-        public IEnumerable<Powerline> Get()
-        {
-            //List<Powerline> testPowerlines = new List<Powerline>
-            //{
-            //    new Powerline{Name="testName 1",ContractPIR = new ContractPIR{Number=1,ContractSum=100000 }, ConractSMR = new ContractSMR{Number=2,ContractSum=200000 } },
-            //    new Powerline{Name="testName 2",ContractPIR = new ContractPIR{Number=3,ContractSum=100000 }},
-            //    new Powerline{Name="testName 3",ContractPIR = new ContractPIR{Number=5,ContractSum=100000 }, ConractSMR = new ContractSMR{Number=6,ContractSum=200000 } }
-            //};
+        //[HttpGet]
+        //public IEnumerable<Powerline> Get()
+        //{
+        //    List<Powerline> testPowerlines = new List<Powerline>
+        //    {
+        //        new Powerline{Name="testName 1",ContractPIR = new ContractPIR{Number=1,ContractSum=100000 }, ConractSMR = new ContractSMR{Number=2,ContractSum=200000 } },
+        //        new Powerline{Name="testName 2",ContractPIR = new ContractPIR{Number=3,ContractSum=100000 }},
+        //        new Powerline{Name="testName 4",ConractSMR = new ContractSMR{Number=6,ContractSum=600000 }},
+        //        new Powerline{Name="testName 3",ContractPIR = new ContractPIR{Number=5,ContractSum=100000 }, ConractSMR = new ContractSMR{Number=6,ContractSum=200000 } }
+        //    };
 
-            //this.ContextDB.AddRange(testPowerlines);
-            //this.ContextDB.SaveChanges();
+        //    this.ContextDB.AddRange(testPowerlines);
+        //    this.ContextDB.SaveChanges();
 
-             return ContextDB.Powerlines.ToList();
+        //    return ContextDB.Powerlines.ToList();
 
-        }
+        //}
 
         [HttpGet]
         public IActionResult ContractPirNotNullReport()    
         {
-            PowerlineContractPirNotNullReport report = new PowerlineContractPirNotNullReport(); // объявляю сервис
+            PowerlineContractPirNotNullReport report = new PowerlineContractPirNotNullReport(ContextDB); // объявляю сервис
             ExcelBuilder builder = new ExcelBuilder(); 
             byte[] file =  builder.BuildFile(report);
             MemoryStream stream = new MemoryStream(file);
@@ -62,7 +58,7 @@ namespace PowerlineTrackerNew.Controllers
         [HttpGet]
         public IActionResult ContractSmrNotNullReport()
         {
-            PowerlineContractSmrNotNullReport report = new PowerlineContractSmrNotNullReport(); // объявляю сервис
+            PowerlineContractSmrNotNullReport report = new PowerlineContractSmrNotNullReport(ContextDB); // объявляю сервис
             ExcelBuilder builder = new ExcelBuilder();
             byte[] file = builder.BuildFile(report);
             MemoryStream stream = new MemoryStream(file);
