@@ -14,39 +14,6 @@ namespace PowerlineTrackerNew.Controllers
     [Route("[controller]/[action]")]
     public class ContractSMRController : ControllerBase
     {
-        private static readonly string[] Summaries = new[]
-        {
-            "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
-        };
 
-        private readonly ILogger<ContractSMRController> _logger;
-
-        public ContractSMRController(ILogger<ContractSMRController> logger)
-        {
-            _logger = logger;
-        }
-
-        [HttpGet]
-        public IEnumerable<WeatherForecast> Get()
-        {
-            var rng = new Random();
-            return Enumerable.Range(1, 5).Select(index => new WeatherForecast
-            {
-                Date = DateTime.Now.AddDays(index),
-                TemperatureC = rng.Next(-20, 55),
-                Summary = Summaries[rng.Next(Summaries.Length)]
-            })
-            .ToArray();
-        }
-
-        [HttpGet]
-        public IActionResult DownloadReport()
-        {
-            ContractSMRReportService service = new ContractSMRReportService();
-            ExcelBuilder builder = new ExcelBuilder();
-            byte[] file =  builder.BuildFile(service);
-            MemoryStream stream = new MemoryStream(file);
-            return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Report.xlsx");
-        }
     }
 }

@@ -23,7 +23,7 @@
 
             List<Powerline> powerlines = query.Execute(ContextDB);
 
-            this.ReportFileName = $"Report {DateTime.Today.ToShortDateString()}"; // тут можно изменить название файла
+            this.ReportFileName = $"Report {DateTime.Today.ToShortDateString()}.xlsx"; // тут можно изменить название файла
 
             worksheet.Cells[1, 2].Value = $"Наименование объекта";
             worksheet.Cells[1, 3].Value = $"Номер договора ПИР";

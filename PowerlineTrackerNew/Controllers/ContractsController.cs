@@ -10,22 +10,22 @@ namespace PowerlineTrackerNew.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class ContractPIRController : ControllerBase
+    public class ContractsController : ControllerBase
     {
         private readonly ILogger<PowerlineController> _logger;
         private readonly ContextDB ContextDB;
 
 
-        public ContractPIRController(ILogger<ContractPIRController> logger, ContextDB contextDB)
+        public ContractsController(ILogger<ContractPIRController> logger, ContextDB contextDB)
         {
             this.ContextDB = contextDB;
-          //  _logger = logger;
+            //  _logger = logger;
         }
 
 
-        public IActionResult GetAllContractsPIRReport()
+        public IActionResult GetContractsNeededClose()
         {
-            GetAllContractsPIRReport report = new GetAllContractsPIRReport(ContextDB); // объявляю сервис
+            GetAllContractsEndsReport report = new GetAllContractsEndsReport(ContextDB); // объявляю сервис
             ExcelBuilder builder = new ExcelBuilder();
             byte[] file = builder.BuildFile(report);
             MemoryStream stream = new MemoryStream(file);

@@ -23,6 +23,12 @@ namespace TrackerDB.Models
         [DisplayFormat(DataFormatString = "{0:dd.MM.yyyy}")]
         public DateTime? DateOfCompleteSecondtStage { get; set; }
 
+        [Display(Name = "Статус первого этапа")]
+        public bool ClosedFirstStage { get; set; }
+
+        [Display(Name = "Статус второго этапа")]
+        public bool ClosedSecondStage { get; set; }
+
         [Display(Name = "Сумма договора СМР")]
         public decimal ContractSum { get; set; }
         

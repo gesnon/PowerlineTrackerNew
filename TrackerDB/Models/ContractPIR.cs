@@ -22,6 +22,9 @@ namespace TrackerDB.Models
         [Display(Name = "Сумма договора ПИР")]
         public decimal ContractSum { get; set; }
 
+        [Display(Name = "Статус")]
+        public bool Closed { get; set; }
+
         public int ID { get; set; }
     }
 }
