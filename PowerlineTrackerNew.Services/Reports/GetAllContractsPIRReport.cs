@@ -2,7 +2,6 @@
 using PowerlineTrackerNew.Services.Queries.ContractPIR;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using TrackerDB;
 using TrackerDB.Models;
 
