@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PowerlineTrackerNew.Services;
+using PowerlineTrackerNew.Services.DTO;
 using PowerlineTrackerNew.Services.Infrastructure;
 using PowerlineTrackerNew.Services.Reports;
 using System.Collections.Generic;
@@ -42,12 +43,32 @@ namespace PowerlineTrackerNew.Controllers
 
         }
 
+        [HttpPost]
+        public void Post(PowerlineDTO powerline)
+        {
+            this.ContextDB.Powerlines.Add(new Powerline { Name = powerline.Name });
+            this.ContextDB.SaveChanges();
+        }
+
+        [HttpPut]
+        public void Put(int ID, PowerlineDTO powerline)
+        {
+            Powerline OldPOwerline = this.ContextDB.Powerlines.First(p => p.ID == ID);
+
+            OldPOwerline.Name = powerline.Name;
+
+            OldPOwerline.Comments = powerline.Comments;
+
+            this.ContextDB.SaveChanges();
+
+        }
+
         [HttpGet]
-        public IActionResult ContractPirNotNullReport()    
+        public IActionResult ContractPirNotNullReport()
         {
             PowerlineContractPirNotNullReport report = new PowerlineContractPirNotNullReport(ContextDB); // объявляю сервис
-            ExcelBuilder builder = new ExcelBuilder(); 
-            byte[] file =  builder.BuildFile(report);
+            ExcelBuilder builder = new ExcelBuilder();
+            byte[] file = builder.BuildFile(report);
             MemoryStream stream = new MemoryStream(file);
 
             return File(stream, Constants.ExcelContentType, report.ReportFileName);

@@ -27,6 +27,7 @@ namespace PowerlineTrackerNew
         public void ConfigureServices(IServiceCollection services)                         
         {
             services.AddControllers();
+;
             services.AddDbContext<ContextDB>(options=> options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Powerline;Trusted_Connection=true")); // эта строка новая, добавляется при подключении БД
         }
 
