@@ -8,5 +8,6 @@ namespace PowerlineTrackerNew.Services.DTO
     {
         public string Name { get; set; }
         public string Comments { get; set; }
+
     }
 }

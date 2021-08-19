@@ -51,13 +51,19 @@ namespace PowerlineTrackerNew.Controllers
         }
 
         [HttpPut]
-        public void Put(int ID, PowerlineDTO powerline)
+        public void Put(int ID, PowerlineDTO newPowerline)
         {
             Powerline OldPOwerline = this.ContextDB.Powerlines.First(p => p.ID == ID);
 
-            OldPOwerline.Name = powerline.Name;
+            if (newPowerline.Name != null)
+            {
+                OldPOwerline.Name = newPowerline.Name;
+            }
+            if (newPowerline.Comments != null)
+            {
+                OldPOwerline.Comments = newPowerline.Comments;
 
-            OldPOwerline.Comments = powerline.Comments;
+            }
 
             this.ContextDB.SaveChanges();
 
