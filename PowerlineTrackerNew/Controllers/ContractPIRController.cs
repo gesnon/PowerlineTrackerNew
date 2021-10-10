@@ -4,6 +4,8 @@ using PowerlineTrackerNew.Services;
 using PowerlineTrackerNew.Services.DTO;
 using PowerlineTrackerNew.Services.Infrastructure;
 using PowerlineTrackerNew.Services.Reports;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TrackerDB;
@@ -25,6 +27,25 @@ namespace PowerlineTrackerNew.Controllers
           //  _logger = logger;
         }
 
+        public IEnumerable<ContractPIRDTO> Get()        {
+
+            //this.ContextDB.SaveChanges();
+
+            return ContextDB.ContractPIRs.
+                Select(c => new ContractPIRDTO
+                {
+                    Number = c.Number,
+                    DateDateOfSigned=c.DateOfSigned.ToString("dd.MM.yy"),
+                    DateOfComplete=c.DateOfComplete.ToString("dd.MM.yy"),
+                    ContractSum=c.ContractSum,
+                    Closed=c.Closed                    
+                }).ToList();
+
+        }
+
+
+
+
         [HttpPut]
         public void Put(int ID, ContractPIRDTO newContractPIR)
         {
@@ -36,7 +57,7 @@ namespace PowerlineTrackerNew.Controllers
             }
             if (newContractPIR.DateOfComplete != null)
             {
-                oldContractPIR.DateOfComplete = newContractPIR.DateOfComplete;
+                oldContractPIR.DateOfComplete = DateTime.Parse(newContractPIR.DateOfComplete);
             }
             if (newContractPIR.ContractSum != 0)
             {
@@ -56,8 +77,8 @@ namespace PowerlineTrackerNew.Controllers
             this.ContextDB.ContractPIRs.Add(new ContractPIR
             {
                 Number = newContractPIR.Number,
-                DateOfSigned = newContractPIR.DateDateOfSigned,
-                DateOfComplete = newContractPIR.DateOfComplete,
+                DateOfSigned = DateTime.Parse(newContractPIR.DateDateOfSigned),
+                DateOfComplete = DateTime.Parse(newContractPIR.DateOfComplete),
                 ContractSum = newContractPIR.ContractSum,
                 Closed = false
             });

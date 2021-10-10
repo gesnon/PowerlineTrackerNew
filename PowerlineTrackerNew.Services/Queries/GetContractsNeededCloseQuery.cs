@@ -18,7 +18,7 @@ namespace PowerlineTrackerNew.Services.Queries
                     Type="PIR",
                     DateOfComplete=_.DateOfComplete }).ToList();
 
-            List<ContractsEnd> ContractsSMRFirstStage = DB.ContractSMRs.Where(_ => _.DateOfCompleteFirstStage < date && _.ClosedFirstStage != true)
+            List<ContractsEnd> ContractsSMRFirstStage = DB.ContractSMRs.Where(_ => _.DateOfCompleteFirstStage < date && _.Status == TrackerDB.Models.ENUMS.Status.Open)
                 .Select(_ => new ContractsEnd
                 {
                     Number = _.Number,
@@ -27,7 +27,7 @@ namespace PowerlineTrackerNew.Services.Queries
                     DateOfComplete = _.DateOfCompleteFirstStage.Value
                 }).ToList();
 
-            List<ContractsEnd> ContractsSMRSecondStage = DB.ContractSMRs.Where(_ => _.DateOfCompleteSecondtStage.HasValue && _.DateOfCompleteSecondtStage < date && _.ClosedSecondStage != true)
+            List<ContractsEnd> ContractsSMRSecondStage = DB.ContractSMRs.Where(_ => _.DateOfCompleteSecondtStage.HasValue && _.DateOfCompleteSecondtStage < date && _.Status != TrackerDB.Models.ENUMS.Status.ClosedSecondStage)
                 .Select(_ => new ContractsEnd
                 {
                     Number = _.Number,

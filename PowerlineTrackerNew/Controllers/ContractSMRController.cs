@@ -4,6 +4,8 @@ using PowerlineTrackerNew.Services;
 using PowerlineTrackerNew.Services.DTO;
 using PowerlineTrackerNew.Services.Infrastructure;
 using PowerlineTrackerNew.Services.Reports;
+using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using TrackerDB;
@@ -25,6 +27,24 @@ namespace PowerlineTrackerNew.Controllers
             //  _logger = logger;
         }
 
+        public IEnumerable<ContractSMRDTO> Get()
+        {
+
+            //this.ContextDB.SaveChanges();
+
+            return ContextDB.ContractSMRs.
+                Select(c => new ContractSMRDTO
+                {
+                    Number = c.Number,
+                    DateOfSigned = c.DateOfSigned.ToString("dd.MM.yy"),
+                    DateOfCompleteFirstStage = c.DateOfCompleteFirstStage.HasValue ? c.DateOfCompleteFirstStage.Value.ToString("dd.MM.yy") : "",
+                    DateOfCompleteSecondtStage = c.DateOfCompleteSecondtStage.HasValue ? c.DateOfCompleteSecondtStage.Value.ToString("dd.MM.yy") : "",
+                    ContractSum = c.ContractSum,
+                    Status=c.Status
+                }).ToList();
+
+        }
+
         [HttpPut]
         public void Put(int ID, ContractSMRDTO newContractSMR)
         {
@@ -34,26 +54,26 @@ namespace PowerlineTrackerNew.Controllers
             {
                 oldContractSMR.Number = newContractSMR.Number;
             }
+            if (newContractSMR.DateOfSigned != null)
+            {
+                oldContractSMR.DateOfSigned = DateTime.Parse(newContractSMR.DateOfSigned);
+            }
             if (newContractSMR.DateOfCompleteFirstStage != null)
             {
-                oldContractSMR.DateOfCompleteFirstStage = newContractSMR.DateOfCompleteFirstStage;
+                oldContractSMR.DateOfCompleteFirstStage = DateTime.Parse(newContractSMR.DateOfCompleteFirstStage);
             }
             if (newContractSMR.DateOfCompleteSecondtStage != null)
             {
-                oldContractSMR.DateOfCompleteSecondtStage = newContractSMR.DateOfCompleteSecondtStage;
+                oldContractSMR.DateOfCompleteSecondtStage = DateTime.Parse(newContractSMR.DateOfCompleteSecondtStage);
             }
             if (newContractSMR.ContractSum != 0)
             {
                 oldContractSMR.ContractSum = newContractSMR.ContractSum;
             }
-            if (newContractSMR.ClosedFirstStage != newContractSMR.ClosedFirstStage)    // не понимаю как правильно отследить изменение поля bool если оно не заполняется в форме
+            if (newContractSMR.Status != newContractSMR.Status)    // не понимаю как правильно отследить изменение поля bool если оно не заполняется в форме
             {
-                oldContractSMR.ClosedFirstStage = newContractSMR.ClosedFirstStage;
-            }
-            if (newContractSMR.ClosedSecondStage != newContractSMR.ClosedSecondStage)    // не понимаю как правильно отследить изменение поля bool если оно не заполняется в форме
-            {
-                oldContractSMR.ClosedSecondStage = newContractSMR.ClosedSecondStage;
-            }
+                oldContractSMR.Status = newContractSMR.Status;            }
+ 
 
             this.ContextDB.SaveChanges();
         }
@@ -64,12 +84,11 @@ namespace PowerlineTrackerNew.Controllers
             this.ContextDB.ContractSMRs.Add(new ContractSMR
             {
                 Number = newContractSMR.Number,
-                DateOfSigned = newContractSMR.DateDateOfSigned,
-                DateOfCompleteFirstStage = newContractSMR.DateOfCompleteFirstStage,
-                DateOfCompleteSecondtStage = newContractSMR.DateOfCompleteSecondtStage,
+                DateOfSigned = DateTime.Parse(newContractSMR.DateOfSigned),
+                DateOfCompleteFirstStage = DateTime.Parse(newContractSMR.DateOfCompleteFirstStage),
+                DateOfCompleteSecondtStage = DateTime.Parse(newContractSMR.DateOfCompleteSecondtStage),
                 ContractSum = newContractSMR.ContractSum,
-                ClosedFirstStage = false,
-                ClosedSecondStage=false
+                Status=newContractSMR.Status
             });
 
             this.ContextDB.SaveChanges();

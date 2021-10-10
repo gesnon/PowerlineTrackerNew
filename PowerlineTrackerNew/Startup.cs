@@ -26,6 +26,8 @@ namespace PowerlineTrackerNew
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)                         
         {
+            services.AddCors();
+
             services.AddControllers();
 ;
             services.AddDbContext<ContextDB>(options=> options.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=Powerline;Trusted_Connection=true")); // эта строка новая, добавляется при подключении БД
@@ -34,6 +36,8 @@ namespace PowerlineTrackerNew
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseCors(c => c.AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader());
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();

@@ -20,7 +20,7 @@ namespace PowerlineTrackerNew.Controllers
         {
             this.ContextDB = contextDB;
             //  _logger = logger;
-        }
+        }            
 
 
         public IActionResult GetContractsNeededClose()
