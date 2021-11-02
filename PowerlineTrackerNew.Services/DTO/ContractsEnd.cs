@@ -10,7 +10,5 @@ namespace PowerlineTrackerNew.Services.DTO
         public DateTime DateOfSigned { get; set; }
         public DateTime DateOfComplete { get; set; }
         public string Type { get; set; }
-
-
     }
 }

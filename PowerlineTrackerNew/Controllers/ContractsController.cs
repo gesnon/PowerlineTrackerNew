@@ -2,9 +2,8 @@
 using Microsoft.Extensions.Logging;
 using PowerlineTrackerNew.Services;
 using PowerlineTrackerNew.Services.Infrastructure;
-using PowerlineTrackerNew.Services.Reports;
+using System;
 using System.IO;
-using TrackerDB;
 
 namespace PowerlineTrackerNew.Controllers
 {
@@ -13,24 +12,19 @@ namespace PowerlineTrackerNew.Controllers
     public class ContractsController : ControllerBase
     {
         private readonly ILogger<PowerlineController> _logger;
-        private readonly ContextDB ContextDB;
+        private readonly IExcelReportService excelReportService;
 
-
-        public ContractsController(ILogger<ContractPIRController> logger, ContextDB contextDB)
+        public ContractsController(ILogger<ContractPIRController> logger, IExcelReportService excelReportService)
         {
-            this.ContextDB = contextDB;
+            this.excelReportService = excelReportService;
             //  _logger = logger;
         }            
 
-
-        public IActionResult GetContractsNeededClose()
+        public IActionResult GetContractsNeededClose(DateTime date)
         {
-            GetAllContractsEndsReport report = new GetAllContractsEndsReport(ContextDB); // объявляю сервис
-            ExcelBuilder builder = new ExcelBuilder();
-            byte[] file = builder.BuildFile(report);
-            MemoryStream stream = new MemoryStream(file);
+            MemoryStream stream = this.excelReportService.GetAllContractsEndsExcelReport(date);
 
-            return File(stream, Constants.ExcelContentType, report.ReportFileName);
+            return File(stream, Constants.ExcelContentType, $"Report {DateTime.Today.ToShortDateString()}.xlsx");
         }
     }
 }

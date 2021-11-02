@@ -3,13 +3,9 @@ using Microsoft.Extensions.Logging;
 using PowerlineTrackerNew.Services;
 using PowerlineTrackerNew.Services.DTO;
 using PowerlineTrackerNew.Services.Infrastructure;
-using PowerlineTrackerNew.Services.Reports;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using TrackerDB;
-using TrackerDB.Models;
 
 namespace PowerlineTrackerNew.Controllers
 {
@@ -17,84 +13,42 @@ namespace PowerlineTrackerNew.Controllers
     [Route("[controller]/[action]")]
     public class ContractPIRController : ControllerBase
     {
-        private readonly ILogger<PowerlineController> _logger;
-        private readonly ContextDB ContextDB;
+        private readonly ILogger<ContractPIRController> logger;
+        private readonly IExcelReportService excelReportService;
+        private readonly IContractPIRService contractPIRService;
 
-
-        public ContractPIRController(ILogger<ContractPIRController> logger, ContextDB contextDB)
+        public ContractPIRController(ILogger<ContractPIRController> logger, IExcelReportService excelReportService, IContractPIRService contractPIRService)
         {
-            this.ContextDB = contextDB;
-          //  _logger = logger;
+            this.logger = logger;
+            this.excelReportService = excelReportService;
+            this.contractPIRService = contractPIRService;
+            //  _logger = logger;
         }
 
-        public IEnumerable<ContractPIRDTO> Get()        {
+        [HttpGet]
+        public IEnumerable<ContractPIRDTO> Get()
+        {
 
-            //this.ContextDB.SaveChanges();
-
-            return ContextDB.ContractPIRs.
-                Select(c => new ContractPIRDTO
-                {
-                    Number = c.Number,
-                    DateDateOfSigned=c.DateOfSigned.ToString("dd.MM.yy"),
-                    DateOfComplete=c.DateOfComplete.ToString("dd.MM.yy"),
-                    ContractSum=c.ContractSum,
-                    Closed=c.Closed                    
-                }).ToList();
-
+            return this.contractPIRService.GetAllContractsPIRDTO();
         }
-
-
-
 
         [HttpPut]
         public void Put(int ID, ContractPIRDTO newContractPIR)
         {
-            ContractPIR oldContractPIR = this.ContextDB.ContractPIRs.First(c => c.ID == ID);
-
-            if (newContractPIR.Number != 0)
-            {
-                oldContractPIR.Number = newContractPIR.Number;
-            }
-            if (newContractPIR.DateOfComplete != null)
-            {
-                oldContractPIR.DateOfComplete = DateTime.Parse(newContractPIR.DateOfComplete);
-            }
-            if (newContractPIR.ContractSum != 0)
-            {
-                oldContractPIR.ContractSum = newContractPIR.ContractSum;
-            }
-            if (newContractPIR.Closed != oldContractPIR.Closed)    // не понимаю как правильно отследить изменение поля bool если оно не заполняется в форме
-            {
-                oldContractPIR.Closed = newContractPIR.Closed;
-            }
-
-            this.ContextDB.SaveChanges();
+            this.contractPIRService.UpdateContractPIR(ID, newContractPIR);
         }
 
         [HttpPost]
         public void Post(ContractPIRDTO newContractPIR)
-        {          
-            this.ContextDB.ContractPIRs.Add(new ContractPIR
-            {
-                Number = newContractPIR.Number,
-                DateOfSigned = DateTime.Parse(newContractPIR.DateDateOfSigned),
-                DateOfComplete = DateTime.Parse(newContractPIR.DateOfComplete),
-                ContractSum = newContractPIR.ContractSum,
-                Closed = false
-            });
-
-            this.ContextDB.SaveChanges();
+        {
+            this.contractPIRService.AddContractPIR(newContractPIR);
         }
 
-
         public IActionResult GetAllContractsPIRReport()
-        {
-            GetAllContractsPIRReport report = new GetAllContractsPIRReport(ContextDB); // объявляю сервис
-            ExcelBuilder builder = new ExcelBuilder();
-            byte[] file = builder.BuildFile(report);
-            MemoryStream stream = new MemoryStream(file);
+        {            
+            MemoryStream stream = this.excelReportService.GetAllContractsPIRExcelReport();
 
-            return File(stream, Constants.ExcelContentType, report.ReportFileName);
+            return File(stream, Constants.ExcelContentType, $"Report {DateTime.Today.ToShortDateString()}.xlsx");
         }
     }
 }

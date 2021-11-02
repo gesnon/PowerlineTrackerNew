@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace PowerlineTrackerNew.Services.Queries.Powerline.ENUMS
+namespace PowerlineTrackerNew.Services.ENUMS
 {
     public enum ContractType
     {
