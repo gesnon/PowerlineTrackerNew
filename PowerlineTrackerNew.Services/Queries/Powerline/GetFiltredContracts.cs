@@ -12,7 +12,7 @@ namespace PowerlineTrackerNew.Services.Queries.Powerline
 {
     public class GetFiltredContracts
     {
-        public ContractsDTO GetContractsDTO(ContextDB DB, Status status, ContractType contractType, DateTime startDate, DateTime endDate)
+        public ContractsDTO GetContractsDTO(ContextDB DB, Status status, ContractType contractType, DateTime? startDate=null, DateTime? endDate=null)
         {
             ContractsDTO newContracts = new ContractsDTO();
 
@@ -26,11 +26,11 @@ namespace PowerlineTrackerNew.Services.Queries.Powerline
             {
                 if (status == Status.Closed)
                 {
-                    queryPIR = queryPIR.Where(_ => _.Closed == true);
+                    queryPIR = queryPIR.Where(_ => _.Status == Status.Closed);
                 }
                 if (status == Status.Open)
                 {
-                    queryPIR = queryPIR.Where(_ => _.Closed == false);
+                    queryPIR = queryPIR.Where(_ => _.Status == Status.Open);
                 }
                 if (startDate != null)
                 {
@@ -43,25 +43,32 @@ namespace PowerlineTrackerNew.Services.Queries.Powerline
             }
 
             if (contractType == ContractType.SMR)
-            {
+            {               
                 if (status == Status.Closed)
                 {
                     querySMR = querySMR.Where(_ => _.Status == Status.ClosedSecondStage);
                 }
                 if (status == Status.Open)
                 {
-                    queryPIR = queryPIR.Where(_ => _.Closed == false);
+                    querySMR = querySMR.Where(_ => _.Status == Status.Open);
                 }
-                if (startDate != null)
+
+
+                newContracts.ContractsSMRDTO = querySMR.Select(_ => new ContractSMRDTO
                 {
-                    queryPIR = queryPIR.Where(_ => _.DateOfComplete >= startDate);
+                    Number = _.Number,
+                    ContractSum = _.ContractSum,
+                    Status = _.Status,
+                    DateOfSigned = _.DateOfSigned.ToString(),
+                    DateOfCompleteFirstStage = _.DateOfCompleteFirstStage.ToString(),
+                    DateOfCompleteSecondtStage = _.DateOfCompleteSecondtStage.ToString()
+
                 }
-                if (endDate != null)
-                {
-                    queryPIR = queryPIR.Where(_ => _.DateOfComplete <= endDate);
-                }
+                    ).ToList();
             }
-            return null;
+
+            return newContracts;
+
         }
     }
 }

@@ -11,7 +11,7 @@ namespace PowerlineTrackerNew.Services.Queries
     {
         public List<ContractsEnd> Execute(ContextDB DB, DateTime date)
         {
-            List<ContractsEnd> ContractsPIR =  DB.ContractPIRs.Where(_=>_.DateOfComplete < date && _.Closed!=true)
+            List<ContractsEnd> ContractsPIR =  DB.ContractPIRs.Where(_=>_.DateOfComplete < date && _.Status!=TrackerDB.Models.ENUMS.Status.Closed)
                 .Select(_=>new ContractsEnd {
                     Number=_.Number,
                     DateOfSigned=_.DateOfSigned,

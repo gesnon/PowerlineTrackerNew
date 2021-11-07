@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using PowerlineTrackerNew.Services;
 using PowerlineTrackerNew.Services.DTO;
 using PowerlineTrackerNew.Services.Infrastructure;
+using PowerlineTrackerNew.Services.Queries.Powerline;
 using PowerlineTrackerNew.Services.Reports;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.IO;
 using System.Linq;
 using TrackerDB;
 using TrackerDB.Models;
+using TrackerDB.Models.ENUMS;
 
 namespace PowerlineTrackerNew.Controllers
 {
@@ -17,7 +19,6 @@ namespace PowerlineTrackerNew.Controllers
     [Route("[controller]/[action]")]
     public class ContractSMRController : ControllerBase
     {
-        private readonly ILogger<PowerlineController> _logger;
         private readonly ContextDB ContextDB;
 
 
@@ -27,21 +28,12 @@ namespace PowerlineTrackerNew.Controllers
             //  _logger = logger;
         }
 
-        public IEnumerable<ContractSMRDTO> Get()
+        [Route("~/contractSMR/get/{status}")]
+        public IEnumerable<ContractSMRDTO> Get(Status status)
         {
+            GetFiltredContracts getContractsSMR = new GetFiltredContracts();
 
-            //this.ContextDB.SaveChanges();
-
-            return ContextDB.ContractSMRs.
-                Select(c => new ContractSMRDTO
-                {
-                    Number = c.Number,
-                    DateOfSigned = c.DateOfSigned.ToString("dd.MM.yy"),
-                    DateOfCompleteFirstStage = c.DateOfCompleteFirstStage.HasValue ? c.DateOfCompleteFirstStage.Value.ToString("dd.MM.yy") : "",
-                    DateOfCompleteSecondtStage = c.DateOfCompleteSecondtStage.HasValue ? c.DateOfCompleteSecondtStage.Value.ToString("dd.MM.yy") : "",
-                    ContractSum = c.ContractSum,
-                    Status=c.Status
-                }).ToList();
+            return getContractsSMR.GetContractsDTO(ContextDB,status, Services.Queries.Powerline.ENUMS.ContractType.SMR).ContractsSMRDTO;
 
         }
 
@@ -72,8 +64,9 @@ namespace PowerlineTrackerNew.Controllers
             }
             if (newContractSMR.Status != newContractSMR.Status)    // не понимаю как правильно отследить изменение поля bool если оно не заполняется в форме
             {
-                oldContractSMR.Status = newContractSMR.Status;            }
- 
+                oldContractSMR.Status = newContractSMR.Status;
+            }
+
 
             this.ContextDB.SaveChanges();
         }
@@ -88,7 +81,7 @@ namespace PowerlineTrackerNew.Controllers
                 DateOfCompleteFirstStage = DateTime.Parse(newContractSMR.DateOfCompleteFirstStage),
                 DateOfCompleteSecondtStage = DateTime.Parse(newContractSMR.DateOfCompleteSecondtStage),
                 ContractSum = newContractSMR.ContractSum,
-                Status=newContractSMR.Status
+                Status = newContractSMR.Status
             });
 
             this.ContextDB.SaveChanges();

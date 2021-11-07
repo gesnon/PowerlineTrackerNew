@@ -3,6 +3,7 @@ using Microsoft.Extensions.Logging;
 using PowerlineTrackerNew.Services;
 using PowerlineTrackerNew.Services.DTO;
 using PowerlineTrackerNew.Services.Infrastructure;
+using PowerlineTrackerNew.Services.Queries.Powerline;
 using PowerlineTrackerNew.Services.Reports;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.IO;
 using System.Linq;
 using TrackerDB;
 using TrackerDB.Models;
+using TrackerDB.Models.ENUMS;
 
 namespace PowerlineTrackerNew.Controllers
 {
@@ -27,21 +29,13 @@ namespace PowerlineTrackerNew.Controllers
           //  _logger = logger;
         }
 
-        public IEnumerable<ContractPIRDTO> Get()        {
+        public IEnumerable<ContractPIRDTO> Get(ContextDB contextDB, Status status)        {
 
-            //this.ContextDB.SaveChanges();
+            GetFiltredContracts getContractsPIR = new GetFiltredContracts();
 
-            return ContextDB.ContractPIRs.
-                Select(c => new ContractPIRDTO
-                {
-                    Number = c.Number,
-                    DateDateOfSigned=c.DateOfSigned.ToString("dd.MM.yy"),
-                    DateOfComplete=c.DateOfComplete.ToString("dd.MM.yy"),
-                    ContractSum=c.ContractSum,
-                    Closed=c.Closed                    
-                }).ToList();
+            return getContractsPIR.GetContractsDTO(contextDB, status, Services.Queries.Powerline.ENUMS.ContractType.PIR).ContractsPIRDTO;         
 
-        }
+        }     
 
 
 
@@ -63,9 +57,9 @@ namespace PowerlineTrackerNew.Controllers
             {
                 oldContractPIR.ContractSum = newContractPIR.ContractSum;
             }
-            if (newContractPIR.Closed != oldContractPIR.Closed)    // не понимаю как правильно отследить изменение поля bool если оно не заполняется в форме
+            if (newContractPIR.Status != oldContractPIR.Status)    // не понимаю как правильно отследить изменение поля bool если оно не заполняется в форме
             {
-                oldContractPIR.Closed = newContractPIR.Closed;
+                oldContractPIR.Status = newContractPIR.Status;
             }
 
             this.ContextDB.SaveChanges();
@@ -73,15 +67,15 @@ namespace PowerlineTrackerNew.Controllers
 
         [HttpPost]
         public void Post(ContractPIRDTO newContractPIR)
-        {          
+        {
             this.ContextDB.ContractPIRs.Add(new ContractPIR
             {
                 Number = newContractPIR.Number,
                 DateOfSigned = DateTime.Parse(newContractPIR.DateDateOfSigned),
                 DateOfComplete = DateTime.Parse(newContractPIR.DateOfComplete),
                 ContractSum = newContractPIR.ContractSum,
-                Closed = false
-            });
+                Status = Status.Open
+            }) ;
 
             this.ContextDB.SaveChanges();
         }
