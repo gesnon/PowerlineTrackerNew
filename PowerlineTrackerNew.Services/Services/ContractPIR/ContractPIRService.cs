@@ -47,7 +47,7 @@ namespace PowerlineTrackerNew.Services
                 DateDateOfSigned = c.DateOfSigned.ToString("dd.MM.yy"),
                 DateOfComplete = c.DateOfComplete.ToString("dd.MM.yy"),
                 ContractSum = c.ContractSum,
-                Closed = c.Closed
+                Status = TrackerDB.Models.ENUMS.Status.Closed
             }).ToList();
         }
 
@@ -67,9 +67,9 @@ namespace PowerlineTrackerNew.Services
             {
                 oldContractPIR.ContractSum = newContractPIR.ContractSum;
             }
-            if (newContractPIR.Closed != oldContractPIR.Closed)    // не понимаю как правильно отследить изменение поля bool если оно не заполняется в форме
+            if (newContractPIR.Status != oldContractPIR.Status)    // не понимаю как правильно отследить изменение поля bool если оно не заполняется в форме
             {
-                oldContractPIR.Closed = newContractPIR.Closed;
+                oldContractPIR.Status = newContractPIR.Status;
             }
 
             this.context.SaveChanges();
@@ -83,7 +83,7 @@ namespace PowerlineTrackerNew.Services
                 DateOfSigned = DateTime.Parse(newContractPIR.DateDateOfSigned),
                 DateOfComplete = DateTime.Parse(newContractPIR.DateOfComplete),
                 ContractSum = newContractPIR.ContractSum,
-                Closed = false
+                Status = TrackerDB.Models.ENUMS.Status.Open
             });
 
             this.context.SaveChanges();

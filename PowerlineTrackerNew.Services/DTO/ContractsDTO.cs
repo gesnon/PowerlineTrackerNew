@@ -5,15 +5,10 @@ using TrackerDB.Models;
 
 namespace PowerlineTrackerNew.Services.DTO
 {
-    public class ContractPIRDTO
+    public class ContractsDTO
     {
-        public int Number { get; set; }
-        public string DateDateOfSigned { get; set; }
-        public string DateOfComplete { get; set; }
-        public decimal ContractSum { get; set; }
-        public bool Closed { get; set; }
-
-        public List<AdditionalAgreement> AdditionalAgreements { get; set; }
+        public List<ContractPIRDTO> ContractsPIRDTO { get; set; }
+        public List<ContractSMRDTO> ContractsSMRDTO { get; set; }
 
     }
 }

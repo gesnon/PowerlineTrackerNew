@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
+using TrackerDB.Models.ENUMS;
 
 namespace TrackerDB.Models
 {
@@ -17,7 +18,7 @@ namespace TrackerDB.Models
 
         public decimal ContractSum { get; set; }
 
-        public bool Closed { get; set; }
+        public Status Status { get; set; }
 
         public List<AdditionalAgreementPIR> AdditionalAgreements { get; set; }
 

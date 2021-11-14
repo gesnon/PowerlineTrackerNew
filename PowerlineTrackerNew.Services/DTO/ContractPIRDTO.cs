@@ -2,13 +2,19 @@
 using System.Collections.Generic;
 using System.Text;
 using TrackerDB.Models;
+using TrackerDB.Models.ENUMS;
 
 namespace PowerlineTrackerNew.Services.DTO
 {
-    public class ContractsDTO
+    public class ContractPIRDTO
     {
-        public List<ContractPIRDTO> ContractsPIRDTO { get; set; }
-        public List<ContractSMRDTO> ContractsSMRDTO { get; set; }
+        public int Number { get; set; }
+        public string DateDateOfSigned { get; set; }
+        public string DateOfComplete { get; set; }
+        public decimal ContractSum { get; set; }
+        public Status Status { get; set; }
+
+        public List<AdditionalAgreement> AdditionalAgreements { get; set; }
 
     }
 }
