@@ -13,6 +13,25 @@ namespace PowerlineTrackerNew.Services
     {
         private readonly ContextDB context;
 
+        public ContractPIR GetContractByID(int ID)
+        {
+            return context.ContractPIRs.FirstOrDefault(_ => _.ID == ID);
+        }
+
+        public ContractPIRDTO GetContractPIRDTOByID(int ID)
+        {
+            ContractPIR contractPIR = context.ContractPIRs.FirstOrDefault(_ => _.ID == ID);
+            ContractPIRDTO contractPIRDTO = new ContractPIRDTO
+            {
+                Number = contractPIR.Number,
+                DateOfSigned = contractPIR.DateOfSigned.ToString("dd.MM.yy"),
+                DateOfComplete = contractPIR.DateOfComplete.ToString("dd.MM.yy"),
+                ContractSum = contractPIR.ContractSum,
+                Status = contractPIR.Status
+            };
+            return contractPIRDTO;
+        }
+
         public ContractPIRService(ContextDB context)
         {
             this.context = context;
@@ -44,7 +63,7 @@ namespace PowerlineTrackerNew.Services
             return this.context.ContractPIRs.Select(c => new ContractPIRDTO
             {
                 Number = c.Number,
-                DateDateOfSigned = c.DateOfSigned.ToString("dd.MM.yy"),
+                DateOfSigned = c.DateOfSigned.ToString("dd.MM.yy"),
                 DateOfComplete = c.DateOfComplete.ToString("dd.MM.yy"),
                 ContractSum = c.ContractSum,
                 Status = TrackerDB.Models.ENUMS.Status.Closed
@@ -80,7 +99,7 @@ namespace PowerlineTrackerNew.Services
             this.context.ContractPIRs.Add(new ContractPIR
             {
                 Number = newContractPIR.Number,
-                DateOfSigned = DateTime.Parse(newContractPIR.DateDateOfSigned),
+                DateOfSigned = DateTime.Parse(newContractPIR.DateOfSigned),
                 DateOfComplete = DateTime.Parse(newContractPIR.DateOfComplete),
                 ContractSum = newContractPIR.ContractSum,
                 Status = TrackerDB.Models.ENUMS.Status.Open

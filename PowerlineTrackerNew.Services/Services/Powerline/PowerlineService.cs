@@ -15,6 +15,76 @@ namespace PowerlineTrackerNew.Services
     {
         private readonly ContextDB context;
 
+        public ContractsDTO GetFiltredContracts(Status status, ContractType contractType, DateTime? startDate = null, DateTime? endDate = null)
+        {
+
+            ContractsDTO newContracts = new ContractsDTO();
+
+            List<ContractPIRDTO> contractPIRDTOs = new List<ContractPIRDTO>();
+
+            var queryPIR = context.ContractPIRs.AsQueryable();
+
+            var querySMR = context.ContractSMRs.AsQueryable();
+
+            if (contractType == ContractType.PIR)
+            {
+                queryPIR = queryPIR.Where(_ => _.Status == status);
+
+                if (startDate != null)
+                {
+                    queryPIR = queryPIR.Where(_ => _.DateOfComplete >= startDate);
+                }
+                if (endDate != null)
+                {
+                    queryPIR = queryPIR.Where(_ => _.DateOfComplete <= endDate);
+                }
+
+                newContracts.ContractsPIRDTO = queryPIR.Select(_ => new ContractPIRDTO
+                {
+                    Number = _.Number,
+                    ContractSum = _.ContractSum,
+                    Status = _.Status,
+                    DateOfSigned = _.DateOfSigned.ToString(),
+                    DateOfComplete = _.DateOfComplete.ToString()
+
+                }
+                    ).ToList();
+            }
+
+            if (contractType == ContractType.SMR)
+            {
+                if (status != Status.ClosedSecondStage)
+                {
+                    querySMR = querySMR.Where(_ => _.Status != Status.ClosedSecondStage); // показать все активные договоры СМР независимо от статуса
+                }
+                if (startDate != null)
+                {
+                    querySMR = querySMR.Where(_ => _.DateOfCompleteFirstStage >= startDate || _.DateOfCompleteSecondtStage >= startDate);
+                }
+                if (endDate != null)
+                {
+                    querySMR = querySMR.Where(_ => _.DateOfCompleteFirstStage <= endDate || _.DateOfCompleteSecondtStage <= endDate); // не совсекм очевидно что такое endDate и startDate нужно будет переименовать
+                }
+
+
+                newContracts.ContractsSMRDTO = querySMR.Select(_ => new ContractSMRDTO
+                {
+                    Number = _.Number,
+                    ContractSum = _.ContractSum,
+                    Status = _.Status,
+                    DateOfSigned = _.DateOfSigned.ToString(),
+                    DateOfCompleteFirstStage = _.DateOfCompleteFirstStage.ToString(),
+                    DateOfCompleteSecondtStage = _.DateOfCompleteSecondtStage.ToString()
+
+                }
+                    ).ToList();
+            }
+
+            return newContracts;
+
+
+        }
+
         public PowerlineService(ContextDB context)
         {
             this.context = context;
@@ -80,11 +150,11 @@ namespace PowerlineTrackerNew.Services
             {
                 if (status == Status.Closed)
                 {
-                    queryPIR = queryPIR.Where(_ => _.Closed == true);
+                    queryPIR = queryPIR.Where(_ => _.Status == Status.Closed);
                 }
                 if (status == Status.Open)
                 {
-                    queryPIR = queryPIR.Where(_ => _.Closed == false);
+                    queryPIR = queryPIR.Where(_ => _.Status != Status.Closed);
                 }
                 if (startDate != null)
                 {
@@ -104,7 +174,7 @@ namespace PowerlineTrackerNew.Services
                 }
                 if (status == Status.Open)
                 {
-                    queryPIR = queryPIR.Where(_ => _.Closed == false);
+                    queryPIR = queryPIR.Where(_ => _.Status == Status.Open);
                 }
                 if (startDate != null)
                 {

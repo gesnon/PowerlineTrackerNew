@@ -9,7 +9,7 @@ namespace PowerlineTrackerNew.Services.DTO
     public class ContractPIRDTO
     {
         public int Number { get; set; }
-        public string DateDateOfSigned { get; set; }
+        public string DateOfSigned { get; set; }
         public string DateOfComplete { get; set; }
         public decimal ContractSum { get; set; }
         public Status Status { get; set; }

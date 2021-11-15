@@ -12,6 +12,27 @@ namespace PowerlineTrackerNew.Services
     {
         private readonly ContextDB context;
 
+        public ContractSMR GetContractByID(int ID)
+        {
+            return context.ContractSMRs.FirstOrDefault(_ => _.ID == ID);
+        }
+
+        public ContractSMRDTO GetContractSMRDTOByID(int ID)
+        {
+            ContractSMR contractSMR = context.ContractSMRs.FirstOrDefault(_ => _.ID == ID);
+            ContractSMRDTO contractSMRDTO = new ContractSMRDTO
+            {
+                Number = contractSMR.Number,
+                DateOfSigned = contractSMR.DateOfSigned.ToString("dd.MM.yy"),
+                DateOfCompleteFirstStage = contractSMR.DateOfCompleteFirstStage.HasValue ? contractSMR.DateOfCompleteFirstStage.Value.ToString("dd.MM.yy") : "",
+                DateOfCompleteSecondtStage = contractSMR.DateOfCompleteSecondtStage.HasValue ? contractSMR.DateOfCompleteSecondtStage.Value.ToString("dd.MM.yy") : "",
+                ContractSum = contractSMR.ContractSum,
+                Status = contractSMR.Status
+            };
+
+            return contractSMRDTO;
+
+        }
         public ContractSMRService(ContextDB context)
         {
             this.context = context;

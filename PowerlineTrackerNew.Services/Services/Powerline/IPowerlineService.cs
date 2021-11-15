@@ -10,13 +10,15 @@ namespace PowerlineTrackerNew.Services
 {
     public interface IPowerlineService
     {
-        List<Powerline> ContractPirNotNullQuery();
-        List<Powerline> ContractSmrNotNullQuery();
+        List<Powerline> ContractPirNotNullQuery();                   // можно удалить
+        List<Powerline> ContractSmrNotNullQuery();                   // можно удалить
         List<PowerlineDTO> GetAllPowerlines();
         ContractsDTO GetContractsDTO(Status status, ContractType contractType, DateTime startDate, DateTime endDate);
-        void BuildContractSmrNotNullExcelReport(ExcelWorksheet worksheet);
-        void BuildContractPirNotNullExcelReport(ExcelWorksheet worksheet);
+        void BuildContractSmrNotNullExcelReport(ExcelWorksheet worksheet);             // можно изменить(унифицировать)
+        void BuildContractPirNotNullExcelReport(ExcelWorksheet worksheet);            // можно изменить (унифицировать)
         void AddPowerline(PowerlineDTO powerlineDTO);
         void UpdatePowerline(int ID, PowerlineDTO newPowerline);
+
+        ContractsDTO GetFiltredContracts(Status status, ContractType contractType, DateTime? startDate = null, DateTime? endDate = null);
     }
 }

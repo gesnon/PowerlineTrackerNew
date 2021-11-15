@@ -12,5 +12,9 @@ namespace PowerlineTrackerNew.Services
         public List<ContractPIRDTO> GetAllContractsPIRDTO();
         public void UpdateContractPIR(int ID, ContractPIRDTO newContractPIR);
         public void AddContractPIR(ContractPIRDTO newContractPIR);
+
+        public ContractPIR GetContractByID(int ID);
+
+        public ContractPIRDTO GetContractPIRDTOByID(int ID);
     }
 }

@@ -11,6 +11,10 @@ namespace PowerlineTrackerNew.Services
         public void BuildAllContractsSMRExcelReport(ExcelWorksheet worksheet);
         public List<ContractSMRDTO> GetAllContractsSMRDto();
         public void UpdateContractSMR(int ID, ContractSMRDTO newContractSMR);
-        public void AddContractSMR(ContractSMRDTO newContractSMR);        
+        public void AddContractSMR(ContractSMRDTO newContractSMR);
+
+        public ContractSMR GetContractByID(int ID);
+
+        public ContractSMRDTO GetContractSMRDTOByID(int ID);
     }
 }
