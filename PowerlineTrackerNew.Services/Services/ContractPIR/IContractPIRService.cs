@@ -16,5 +16,7 @@ namespace PowerlineTrackerNew.Services
         public ContractPIR GetContractByID(int ID);
 
         public ContractPIRDTO GetContractPIRDTOByID(int ID);
+
+
     }
 }

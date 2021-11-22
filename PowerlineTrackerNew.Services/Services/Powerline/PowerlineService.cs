@@ -28,7 +28,10 @@ namespace PowerlineTrackerNew.Services
 
             if (contractType == ContractType.PIR)
             {
-                queryPIR = queryPIR.Where(_ => _.Status == status);
+                if (status != Status.All)
+                {
+                    queryPIR = queryPIR.Where(_ => _.Status == status);
+                }
 
                 if (startDate != null)
                 {

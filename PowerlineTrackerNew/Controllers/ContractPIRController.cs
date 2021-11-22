@@ -2,27 +2,37 @@
 using Microsoft.Extensions.Logging;
 using PowerlineTrackerNew.Services;
 using PowerlineTrackerNew.Services.DTO;
+using PowerlineTrackerNew.Services.ENUMS;
 using PowerlineTrackerNew.Services.Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using TrackerDB.Models.ENUMS;
 
 namespace PowerlineTrackerNew.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class ContractPIRController : ControllerBase
     {
         private readonly ILogger<ContractPIRController> logger;
         private readonly IExcelReportService excelReportService;
         private readonly IContractPIRService contractPIRService;
+        private readonly IPowerlineService powerlineService;
 
-        public ContractPIRController(ILogger<ContractPIRController> logger, IExcelReportService excelReportService, IContractPIRService contractPIRService)
+        public ContractPIRController(ILogger<ContractPIRController> logger, IExcelReportService excelReportService, IContractPIRService contractPIRService, IPowerlineService powerlineService)
         {
             this.logger = logger;
             this.excelReportService = excelReportService;
             this.contractPIRService = contractPIRService;
+            this.powerlineService = powerlineService;
             //  _logger = logger;
+        }
+
+        [HttpGet("{status}")]
+        public IEnumerable<ContractPIRDTO> Get(Status status)
+        {
+            return  this.powerlineService.GetFiltredContracts(status, ContractType.PIR).ContractsPIRDTO;
         }
 
         [HttpGet]

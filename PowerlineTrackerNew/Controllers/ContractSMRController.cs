@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using PowerlineTrackerNew.Services;
 using PowerlineTrackerNew.Services.DTO;
+using PowerlineTrackerNew.Services.ENUMS;
 using PowerlineTrackerNew.Services.Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -9,23 +10,32 @@ using System.IO;
 using System.Linq;
 using TrackerDB;
 using TrackerDB.Models;
+using TrackerDB.Models.ENUMS;
 
 namespace PowerlineTrackerNew.Controllers
 {
     [ApiController]
-    [Route("[controller]/[action]")]
+    [Route("[controller]")]
     public class ContractSMRController : ControllerBase
     {
         private readonly ILogger<ContractSMRController> logger;
         private readonly IContractSMRService contractSMRService;
         private readonly IExcelReportService excelReportService;
+        private readonly IPowerlineService powerlineService;
 
-        public ContractSMRController(ILogger<ContractSMRController> logger, IContractSMRService contractSMRService, IExcelReportService excelReportService)
+        public ContractSMRController(ILogger<ContractSMRController> logger, IContractSMRService contractSMRService, IExcelReportService excelReportService, IPowerlineService powerlineService)
         {
             this.logger = logger;
             this.contractSMRService = contractSMRService;
             this.excelReportService = excelReportService;
+            this.powerlineService = powerlineService;
             //  _logger = logger;
+        }
+
+        [HttpGet("{status}")]
+        public IEnumerable<ContractSMRDTO> Get(Status status)
+        {
+            return this.powerlineService.GetFiltredContracts(status, ContractType.SMR).ContractsSMRDTO;
         }
 
         [HttpGet]
@@ -33,6 +43,7 @@ namespace PowerlineTrackerNew.Controllers
         {
             return this.contractSMRService.GetAllContractsSMRDto();
         }
+
 
         [HttpPut]
         public void Put(int ID, ContractSMRDTO newContractSMR)
